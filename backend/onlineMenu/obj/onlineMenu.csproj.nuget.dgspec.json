@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\learning desing\\ASP.netCore\\onlineMenu\\onlineMenu\\onlineMenu.csproj": {}
+    "D:\\learning desing\\Projects\\Practic\\onlinemenu\\backend\\onlineMenu\\onlineMenu.csproj": {}
   },
   "projects": {
-    "D:\\learning desing\\ASP.netCore\\onlineMenu\\onlineMenu\\onlineMenu.csproj": {
+    "D:\\learning desing\\Projects\\Practic\\onlinemenu\\backend\\onlineMenu\\onlineMenu.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\learning desing\\ASP.netCore\\onlineMenu\\onlineMenu\\onlineMenu.csproj",
+        "projectUniqueName": "D:\\learning desing\\Projects\\Practic\\onlinemenu\\backend\\onlineMenu\\onlineMenu.csproj",
         "projectName": "onlineMenu",
-        "projectPath": "D:\\learning desing\\ASP.netCore\\onlineMenu\\onlineMenu\\onlineMenu.csproj",
+        "projectPath": "D:\\learning desing\\Projects\\Practic\\onlinemenu\\backend\\onlineMenu\\onlineMenu.csproj",
         "packagesPath": "C:\\Users\\MSI\\.nuget\\packages\\",
-        "outputPath": "D:\\learning desing\\ASP.netCore\\onlineMenu\\onlineMenu\\obj\\",
+        "outputPath": "D:\\learning desing\\Projects\\Practic\\onlinemenu\\backend\\onlineMenu\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -75,6 +75,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.9, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.3, )"
             }
           },
           "imports": [
