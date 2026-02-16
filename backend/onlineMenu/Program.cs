@@ -40,12 +40,49 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // ✅ 3. Configure Database
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sqlOptions => sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null)
-    )
-);
+// ✅ 3. Configure Database
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    // Railway/Production - Use PostgreSQL
+    try 
+    {
+        var databaseUri = new Uri(databaseUrl);
+        var userInfo = databaseUri.UserInfo.Split(':');
+        var builderDb = new Npgsql.NpgsqlConnectionStringBuilder
+        {
+            Host = databaseUri.Host,
+            Port = databaseUri.Port,
+            Username = userInfo[0],
+            Password = userInfo[1],
+            Database = databaseUri.LocalPath.TrimStart('/'),
+            SslMode = Npgsql.SslMode.Require,
+            TrustServerCertificate = true
+        };
+        connectionString = builderDb.ToString();
+        
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(connectionString));
+            
+        Console.WriteLine("--> Using PostgreSQL Database");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> Error configuring PostgreSQL: {ex.Message}");
+    }
+}
+else
+{
+    // Local - Use SQL Server
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(connectionString,
+            sqlOptions => sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null)
+        )
+    );
+    Console.WriteLine("--> Using SQL Server Database");
+}
 
 // Enable CORS (Frontend Access)
 builder.Services.AddCors(options =>
@@ -72,5 +109,27 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();
+
+// ✅ Auto-Migration on Startup
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        // Only run migrations if using PostgreSQL (Railway) to avoid conflicts locally
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
+        {
+            Console.WriteLine("--> Applying Migrations...");
+            context.Database.Migrate();
+            Console.WriteLine("--> Migrations Applied Successfully!");
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
 
 app.Run();
