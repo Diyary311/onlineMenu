@@ -32,7 +32,9 @@ function Drinks({ drinks = [] }) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/drinkcategory`);
+                const res = await fetch(`${API_BASE_URL}/api/drinkcategory`, {
+                    signal: AbortSignal.timeout(30000)
+                });
 
                 if (!res.ok) throw new Error("Failed to load drink categories");
 

@@ -31,7 +31,9 @@ function Sweets({ sweets = [] }) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/sweetcategory`);
+                const res = await fetch(`${API_BASE_URL}/api/sweetcategory`, {
+                    signal: AbortSignal.timeout(30000)
+                });
                 if (!res.ok) throw new Error("Failed to load sweet categories");
 
                 const data = await res.json();

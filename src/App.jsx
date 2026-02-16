@@ -69,7 +69,7 @@ function App() {
   const fetchFoods = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/food`, {
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(30000),
       });
 
       if (!res.ok) throw new Error("Failed to fetch foods: " + res.status);
@@ -92,7 +92,7 @@ function App() {
   const fetchDrinks = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/drink`, {
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(30000),
       });
 
       if (!res.ok) throw new Error("Failed to fetch drinks: " + res.status);
@@ -111,7 +111,7 @@ function App() {
   const fetchSweets = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/sweet`, {
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(30000),
       });
 
       if (!res.ok) throw new Error("Failed to fetch sweets: " + res.status);
