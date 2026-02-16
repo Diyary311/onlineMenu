@@ -6,4 +6,4 @@
 // For production: "https://your-backend-url.com"
 // ============================================================
 
-export const API_BASE_URL = "http://localhost:5256";
+export const API_BASE_URL = "https://authentic-flexibility-production-47d1.up.railway.app/";
